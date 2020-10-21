@@ -17,7 +17,8 @@ interface State {
   shift_date?: string,
   shift_start?: string,
   shift_end?: string,
-  breaks?: string
+  breaks?: string,
+  errors?: string[]
 };
 interface MatchParams {
   organization_id?: string
@@ -32,6 +33,7 @@ class ShiftOverview extends React.Component<LocalProps, State> {
     shift_start: '',
     shift_end: '',
     breaks: '',
+    errors: []
   }
 
   updateShifts = () => {
@@ -100,7 +102,11 @@ class ShiftOverview extends React.Component<LocalProps, State> {
     fetchClient.post('/v1/shifts', { shift })
       .then(() => {
         this.updateShifts();
-      });
+      })
+      .catch(error => {
+        console.log('error: ', error.response);
+        this.setState({ errors: error.response.data.errors })
+      });;
   };
 
   componentDidMount() {
@@ -164,6 +170,9 @@ class ShiftOverview extends React.Component<LocalProps, State> {
             </tr>
           </tbody>
         </table>
+        <div>
+          {this.state.errors.map((e, i) => <p key={i}>{e}</p>)}
+        </div>
       </>
     );
   }

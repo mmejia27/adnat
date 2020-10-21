@@ -18,6 +18,16 @@ class V1::UsersController < ApplicationController
       render json: { errors: ['user not found'] }, :status => :not_found
     end
   end
+
+  def update
+    puts @current_user
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+      render json: { user: @user }
+    else
+      render json: { errors: @user.errors.full_messages }, :status => :unprocessable_entity
+    end
+  end
     
   def create
     @user = User.new(user_params)

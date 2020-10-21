@@ -1,6 +1,7 @@
 import * as React from "react";
 import {
   BrowserRouter,
+  Link,
   Route,
   RouteComponentProps,
   Switch,
@@ -12,6 +13,7 @@ import Home from '../components/Home';
 import Login from '../components/Login';
 import Register from '../components/Register';
 import ShiftOverview from '../components/ShiftOverview';
+import UserEdit from "./UserEdit";
 
 type User = {
   id: number,
@@ -65,26 +67,36 @@ class App extends React.Component<Props & RouteComponentProps, State> {
   componentDidMount() {
     this.loginStatus();
   }
+
   render() {
     const { token, user } = this.state;
-    if (!token) return (<h1 className='content-head is-center'>Loading</h1>);
+    if (!token && this.props.location.pathname !== '/login') return (<h1 className='content-head is-center'>Loading</h1>);
     return (
       <>
         <div className='header'>
-          <div className='pure-menu pure-menu-horizontal pure-menu-fixed'>
-            <h1 className='pure-menu-heading is-center'>Adnat</h1>
+          <div className='pure-menu pure-menu-horizontal'>
+            <a className='pure-menu-heading is-center'>Adnat</a>
+            <ul></ul>
           </div>
         </div>
+        <div style={{clear: 'both'}}></div>
         <div className='content-wrapper'>
           <div className='content'>
             <div className='pure-g'>
               <div className='pure-u-1-8'></div>
               <div className='pure-u-6-8'>
-                <p>Logged in as {user?.name} <button className='pure-button' onClick={this.handleLogout}>Log Out</button></p>
+                { token && 
+                  <div>
+                    Logged in as {user?.name} 
+                    <Link className='pure-button' to='/user'>Edit</Link>
+                    <button className='pure-button' onClick={this.handleLogout}>Log Out</button>
+                  </div>
+                }
                 <Switch>
                   <Route exact path="/" render={props => (<Home {...props} user={this.state.user} />)} />
                   <Route path="/login" render={props => (<Login {...props} handleLogin={this.handleLogin} />)} />
                   <Route path="/register" render={props => (<Register {...props} handleLogin={this.handleLogin} />)} />
+                  <Route path="/user" render={props => (<UserEdit {...props} user={this.state.user} />)} />
                   <Route path="/organization/:organization_id/shifts" render={props => (<ShiftOverview {...props} user={this.state.user} />)} />
                 </Switch>
               </div>

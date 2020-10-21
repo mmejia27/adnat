@@ -36,14 +36,20 @@ class OrganizationEditor extends React.Component<Props, State> {
         .then(response => {
           this.props.handleUpdatedOrganizations(response.data);
         })
-        .catch(error => console.log('error: ', error));
+        .catch(error => {
+          console.log('error: ', error.response);
+          this.setState({ errors: error.response.data.errors })
+        });
     } else {
     let organization = { name, hourly_rate };
     fetchClient.post('/v1/organizations', { organization })
       .then(response => {
         this.props.handleUpdatedOrganizations(response.data);
       })
-      .catch(error => console.log('error: ', error));
+      .catch(error => {
+        console.log('error: ', error.response);
+        this.setState({ errors: error.response.data.errors })
+      });
     }
   };
 
@@ -98,7 +104,9 @@ class OrganizationEditor extends React.Component<Props, State> {
             {this.renderJoinButton()}
           </fieldset>
         </form>
-        
+        <div>
+          {this.state.errors.join(', ')}
+        </div>
       </div>
     );
   }
