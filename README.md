@@ -1,4 +1,4 @@
-# ADNAY
+# ADNAT
 
 ## Requirements
  - Ruby 2.7.2
