@@ -1,7 +1,7 @@
 class V1::BreaksController < ApplicationController
 
   def index
-    @breaks = params[:Break_id] ? Breaks.find(params[:Break_id]).breaks : Break.all
+    @breaks = params[:shift_id] ? Shift.find(params[:shift_id]).breaks : Break.all
     if @breaks
       render json: @breaks, :status => :ok
     else

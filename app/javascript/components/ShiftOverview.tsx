@@ -64,7 +64,7 @@ class ShiftOverview extends React.Component<LocalProps, State> {
     });
   };
 
-  handleFilterNameChange = (event: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement>) => {
+  handleFilterNameChange = (event: React.ChangeEvent<HTMLInputElement|HTMLTextAreaElement|HTMLFormElement>) => {
     const { name, value } = event.target
     const { shifts } = this.state;
     const filtered_shifts = (name === 'filter_name') ? shifts.filter(s => s.user.name.includes(value)) : shifts;
@@ -87,7 +87,7 @@ class ShiftOverview extends React.Component<LocalProps, State> {
     const date = moment(shift_date);
     const start = moment(`${date.format('MM/DD/YYYY')} ${shift_start}`, 'MM/DD/YYYY hh:mm a');
     const tempend = moment(`${date.format('MM/DD/YYYY')} ${shift_end}`, 'MM/DD/YYYY hh:mm a');
-    const overnight = (start.diff(tempend, 'hours', true) <= 0) ? 1 : 0;
+    const overnight = (tempend.diff(start, 'hours', true) <= 0) ? 1 : 0;
     const end = tempend.add(overnight, 'days');
     const breakArr = breaks.trim().split(',').map(b => ({ length: parseInt(b) }));
 

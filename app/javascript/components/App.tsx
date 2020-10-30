@@ -47,7 +47,7 @@ class App extends React.Component<Props & RouteComponentProps, State> {
   loginStatus = () => {
     let user = JSON.parse(localStorage.getItem('user'));
     let token = localStorage.getItem('token');
-
+    if (this.props.location.pathname == '/register') return;
     if (!token) this.handleLogout();
     else
       fetchClient.get(`/v1/users/${user?.id}`)
@@ -70,7 +70,7 @@ class App extends React.Component<Props & RouteComponentProps, State> {
 
   render() {
     const { token, user } = this.state;
-    if (!token && this.props.location.pathname !== '/login') return (<h1 className='content-head is-center'>Loading</h1>);
+    if (!token && (this.props.location.pathname !== '/login' && this.props.location.pathname !== '/register')) return (<h1 className='content-head is-center'>Loading</h1>);
     return (
       <>
         <div className='header'>
